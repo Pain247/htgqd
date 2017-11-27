@@ -25,7 +25,7 @@ func LoadHobbies() []map[string]interface{} {
 			id,_ := strconv.Atoi(v[0])
 			name := v[1]
 			temp_info = map[string]interface{}{
-				" id" : id,
+				"id" : id,
 				 "name" : name,
 			}
 			results = append(results,temp_info)
@@ -43,11 +43,15 @@ func LoadGroup() []string{
 		fmt.Println(err)
 		return nil
 	} else {
-		query := "select code from group"
+		query := "select code from `db_htgqd`.group"
 		rows := myclient.ReadTable(query)
 		results := make([]string,0)
 		for _,v  := range rows{
-			results = append(results,v[0])
+			if _, err := strconv.Atoi(v[0]); err != nil{
+				if(len(v[0])<=3){
+					results = append(results,v[0])
+				}
+			}
 		}
 		return results
 	}
@@ -65,13 +69,15 @@ func GetInfoDep(id int) map[string]interface{}{
 		rows := myclient.ReadTable(query)
 		uni,_ := strconv.Atoi(rows[0][2])
 		arr := GetInfoUni(uni)
-		return  map[string]interface{}{
+		results := make(map[string]interface{})
+		results = map[string]interface{}{
 			"id" : id,
 			"dep_name" : rows[0][0],
 			"code" : rows[0][1],
 			"uni_name": arr[0],
 			"area" : arr[1],
 		}
+		return  results
 	}
 }
 func GetInfoUni(id int) []string{
@@ -85,7 +91,7 @@ func GetInfoUni(id int) []string{
 	} else {
 		query := "select name,area from university where id ="+ strconv.Itoa(id)
 		rows := myclient.ReadTable(query)
-		return rows[0][0]
+		return rows[0]
 	}
 }
 func SortAtt(input []map[string]interface{}) []map[string]interface{}{

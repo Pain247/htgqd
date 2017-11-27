@@ -59,7 +59,7 @@ func LoadDepartment() []map[string]interface{}{
 			results = append(results,temp)
 			temp = make(map[string]interface{})
 		}
-		return Sort(results)
+		return results
 	}
       return nil
 }

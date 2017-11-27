@@ -4,7 +4,6 @@ import (
 	"reflect"
 	"strings"
 	"math"
-	"fmt"
 )
 
 var(
@@ -48,7 +47,6 @@ func NormalizeData(arr []map[string]interface{}) []map[string]interface{}{
 	minamount := GetMinAmount(arr,"amount")
 	maxrank := GetMax(arr,"rank")
 	minrank := GetMin(arr,"rank")
-	fmt.Println(minrank)
 	results := make([]map[string]interface{},0)
 	for i:=0;i<len(arr);i++{
 		if(arr[i]["s2016"].(float64) != -1.0){
@@ -67,8 +65,8 @@ func NormalizeData(arr []map[string]interface{}) []map[string]interface{}{
 			x2 = arr[i]["nv2"].(float64)
 		}
 		amount = Normalize(float64(arr[i]["amount"].(int)),maxamount,minamount)*0.05
-		area := Normalize((arr[i]["area"].(float64)),0,-2)*0.2
-		rank := Normalize(arr[i]["rank"].(float64),maxrank,minrank)*0.1
+		area := Normalize((arr[i]["area"].(float64)),0,-2)*0.15
+		rank := Normalize(arr[i]["rank"].(float64),maxrank,minrank)*0.15
 		temp1 = map[string]interface{}{
 			"id" : arr[i]["id"],
 			"s2016": x16,

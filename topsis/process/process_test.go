@@ -13,5 +13,6 @@ func TestGetAplus(t *testing.T) {
         sstar := GetSstar(arr,mapstar)
 	ssub := GetSstar(arr,mapsub)
 	agg := Aggregate(sstar,ssub)
+	fmt.Println(GetList(agg))
 	fmt.Println(GetMaxC(agg))
 }

@@ -13,7 +13,9 @@ import (
 )
 func (server *Server) InitMux() {
 	server.mux = make(map[string]func(http.ResponseWriter, *http.Request))
-	server.mux["/test"] = server.Topsis
+	server.mux["/api/result"] = server.Topsis
+	server.mux["/api/hobby"] = server.Hobbies
+	server.mux["/api/group"] = server.Group
 }
 func (server *Server) InitServer() {
 	server.config = utils.LoadConfigServer(PATH_SERVER_CONFIG)
@@ -55,8 +57,23 @@ func (server *Server) Topsis(w http.ResponseWriter, r *http.Request){
 	sstar := process.GetSstar(arr,mapstar)
 	ssub := process.GetSstar(arr,mapsub)
 	agg := process.Aggregate(sstar,ssub)
-	_,id_dep := process.GetMaxC(agg)
-	results := load_data.GetInfoDep(id_dep)
+	list := process.GetList(agg)
+	results := make([]map[string]interface{},0)
+	for i:=0;i<len(list);i++{
+		results = append(results,map[string]interface{}{"sst": list[i]["stt"], "data": load_data.GetInfoDep(list[i]["id"].(int))})
+	}
 	res, _ := json.Marshal(results)
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(res)
+}
+
+func (server *Server) Hobbies(w http.ResponseWriter, r *http.Request){
+        results := load_data.LoadHobbies()
+	res,_ := json.Marshal(results)
+	w.Write(res)
+}
+func (server *Server) Group(w http.ResponseWriter, r *http.Request){
+	results := load_data.LoadGroup()
+	res,_ := json.Marshal(results)
 	w.Write(res)
 }

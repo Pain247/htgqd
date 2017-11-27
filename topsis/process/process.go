@@ -128,3 +128,29 @@ func GetMaxC(arr []map[string]interface{}) (float64,int){
 	}
 	return max,id
 }
+func GetList(arr []map[string]interface{}) []map[string]interface{}{
+	max := 0.0
+	max1 := 0.0
+	max2 := 0.0
+	id := 0
+	id1 := 0
+	id2 := 0
+        if len(arr) <= 3 {
+		return arr
+	}else{
+		for i:= 0;i<len(arr);i++{
+			next,_ := (arr[i]["s"]).(float64)
+			if(next >= max){
+				max2 = max1
+				max1 = max
+				max = next
+				id2 = id1
+				id1 = id
+				id = arr[i]["id"].(int)
+			}
+		}
+		results := []map[string]interface{}{{"stt": 1, "c": max, "id" :id},{"stt": 2, "c": max1, "id" :id1},{"stt": 3, "c": max2, "id" :id2}}
+		return results
+	}
+
+}
